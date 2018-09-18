@@ -9,7 +9,7 @@
 #
 # CREATED:	    09/12/2018
 #
-# LAST EDITED:	    09/17/2018
+# LAST EDITED:	    09/18/2018
 ###
 
 go() {
@@ -34,16 +34,6 @@ go() {
     docker stop $containerName
 }
 
-stop() {
-    containerName=`docker ps -a | grep 'kernel-factory' | awk '{print $NF;}'`
-    if [ "x$containerName" = "x" ]; then
-	echo >&2 "The container is not running."
-	return 1
-    fi
-
-    docker container stop $containerName
-}
-
 read -r -d '' USAGE <<EOF
 \nUsage: popcorn COMMAND
 A convenience for interacting with the kernel-factory container.
@@ -52,12 +42,11 @@ go\tConnect to the kernel-factory container through ssh.
 stop\tHalt the container using docker.\n
 EOF
 
+# TODO: popcorn start
+
 case $1 in
     go)
 	go
-	;;
-    stop)
-	stop
 	;;
     *)
 	echo "$USAGE"

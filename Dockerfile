@@ -17,11 +17,14 @@ RUN apt-get update			\
        bison				\
        flex				\
        bc				\
+       cpio				\
+    && apt-get clean
+
+RUN apt-get install -y			\
        gcc-arm-linux-gnueabi		\
        binutils-arm-linux-gnueabi	\
     && apt-get clean
-
-# RUN apt-get install -y			\
+# TODO: Uncomment these
 #        gcc-arm-linux-gnueabihf		\
 #        binutils-arm-linux-gnueabihf	\
 #        gcc-aarch64-linux-gnu		\
@@ -48,18 +51,17 @@ ENV lib=
 # Expose ssh port
 EXPOSE 22
 
+# Setup env
 ENV CCACHE_DIR=/ccache						\
-    FACTORY_DIR=/kernel-factory					\
-    LINUX_REPO=pub/scm/linux/kernel/git/stable/linux-stable.git
+    FACTORY_DIR=/kernel-factory
 
+# Add contents/
 RUN mkdir $FACTORY_DIR $CCACHE_DIR
-RUN git clone git://git.kernel.org/$LINUX_REPO $FACTORY_DIR/linux-stable
-# RUN git fetch --tags
+COPY contents/linux-stable $FACTORY_DIR/linux-stable
+COPY contents/configure $FACTORY_DIR
 
-WORKDIR $FACTORY_DIR
+# Ensure that when we ssh into the container, we start at $FACTORY_DIR
 RUN echo "cd $FACTORY_DIR" >> /root/.bashrc
-
-ADD contents/configure $FACTORY_DIR
 
 # Start the daemon
 CMD ["/usr/sbin/sshd", "-D"]

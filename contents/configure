@@ -8,7 +8,7 @@
 #
 # CREATED:	    09/12/2018
 #
-# LAST EDITED:	    09/14/2018
+# LAST EDITED:	    09/18/2018
 ###
 
 [ $_ != $0 ] \
@@ -20,6 +20,8 @@ if [ ! -d /shared-workspace ]; then
 	     "\nexist. Please create a directory at this location before"\
 	     "\ncontinuing."
     return 1
+else
+    export O=/shared-workspace
 fi
 
 case $1 in
