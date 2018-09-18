@@ -1,0 +1,55 @@
+#!/bin/sh
+###############################################################################
+# NAME:		    configure
+#
+# AUTHOR:	    Ethan D. Twardy <edtwardy@mtu.edu>
+#
+# DESCRIPTION:	    This script sets up the environment for cross compilation.
+#
+# CREATED:	    09/12/2018
+#
+# LAST EDITED:	    09/14/2018
+###
+
+[ $_ != $0 ] \
+    || echo >&2 "Warning: Script may not have been sourced. Environment"\
+		"\nchanges will have no effect."
+
+if [ ! -d /shared-workspace ]; then
+    echo >&2 "The default output location (/shared-workspace) does not"\
+	     "\nexist. Please create a directory at this location before"\
+	     "\ncontinuing."
+    return 1
+fi
+
+case $1 in
+    x86_64)
+	export ARCH=
+	export CROSS_COMPILE=
+	;;
+    armhf)
+	export ARCH=arm
+	export CROSS_COMPILE=arm-linux-gnueabihf-
+	;;
+    arm)
+	export ARCH=arm
+	export CROSS_COMPILE=arm-linux-gnueabi-
+	;;
+    aarch64)
+	export ARCH=arm64
+	export CROSS_COMPILE=aarch64-linux-gnu-
+	;;
+    powerpc64)
+	export ARCH=powerpc
+	export CROSS_COMPILE=powerpc64-linux-gnu-
+	;;
+    powerpc)
+	export ARCH=powerpc
+	export CROSS_COMPILE=powerpc-linux-gnu-
+	;;
+    *)
+	echo "Unknown or unsupported architecture: $1"
+	;;
+esac
+
+##############################################################################
